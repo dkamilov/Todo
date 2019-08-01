@@ -1,0 +1,33 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+    </style>
+
+    <!--<style name="EditActivity.ActionBar" parent="Widget.AppCompat.Light.ActionBar">-->
+        <!--<item name="android:titleTextStyle">@style/EditActivity.ActionBar.Title</item>-->
+        <!--<item name="titleTextStyle">@style/EditActivity.ActionBar.Title</item>-->
+    <!--</style>-->
+
+    <!--<style name="EditActivity.ActionBar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">-->
+        <!--<item name="android:textColor">@color/editActivityActionBarTextColor</item>-->
+    <!--</style>-->
+
+
+    <style name="EditActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/editActivityColorPrimary</item>
+        <item name="colorPrimaryDark">@color/editActivityColorPrimaryDark</item>
+        <item name="colorAccent">@color/editActivityColorAccent</item>
+        <item name="titleTextColor">@color/editActivityActionBarTextColor</item>
+        <item name="actionMenuTextColor">@color/editActivityActionBarTextColor</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+    </style>
+
+
+
+</resources>

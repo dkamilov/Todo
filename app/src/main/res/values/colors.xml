@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#efbd26</color>
+    <color name="colorPrimaryDark">#EFAA26</color>
+    <color name="colorAccent">#90b53d</color>
+
+    <color name="editActivityColorPrimary">#FFFFE1</color>
+    <color name="editActivityColorPrimaryDark">#EFAA26</color>
+    <color name="editActivityColorAccent">#90b53d</color>
+
+    <color name="editActivityActionBarTextColor">#3B3B3A</color>
+    <color name="windowBackground">#FFFFE1</color>
+</resources>
