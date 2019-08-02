@@ -45,7 +45,7 @@ public class TodoEditFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UUID mId = (UUID)getArguments().getSerializable(ARGS_TODO_ID);
-        mTodo = TodoLab.get(getActivity()).getCrime(mId);
+        mTodo = TodoLab.get(getActivity()).getTodo(mId);
     }
 
     @Nullable

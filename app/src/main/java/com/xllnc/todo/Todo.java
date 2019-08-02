@@ -23,8 +23,16 @@ public class Todo {
         return mTitle;
     }
 
+    public void setDate(Date date){
+        mDate = date;
+    }
+
     public Date getDate(){
         return mDate;
+    }
+
+    public void setId(UUID id){
+        mId = id;
     }
 
     public UUID getId(){

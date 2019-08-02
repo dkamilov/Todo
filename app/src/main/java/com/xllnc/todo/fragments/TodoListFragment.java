@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,15 +27,12 @@ public class TodoListFragment extends Fragment{
     private RecyclerView mRecyclerView;
 
     private TodoAdapter mAdapter;
-    private List<Todo> mItems;
-
     private Callbacks mCallbacks;
+    private List<Todo> items;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mItems = TodoLab.get(getActivity()).getItems();
-        mAdapter = new TodoAdapter(mItems);
     }
 
     @Override
@@ -54,7 +52,8 @@ public class TodoListFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_list_todo, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mAdapter);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+        updateUI();
         fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +69,43 @@ public class TodoListFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.notifyDataSetChanged();
+        updateUI();
     }
+
+    private void updateUI(){
+        items = TodoLab.get(getActivity()).getItems();
+        if(mAdapter == null){
+            mAdapter = new TodoAdapter(items);
+            mRecyclerView.setAdapter(mAdapter);
+        }else{
+            mAdapter.setItems(items);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     *
+     *
+     * RecyclerView ItemTouchHelper
+     *
+     *
+     */
+    private ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT| ItemTouchHelper.RIGHT) {
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            TodoLab.get(getActivity()).deleteTodo(items.get(viewHolder.getAdapterPosition()));
+            mAdapter.setItems(TodoLab.get(getActivity()).getItems());
+            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+        }
+    });
 
 
     /**
@@ -137,6 +171,12 @@ public class TodoListFragment extends Fragment{
         public int getItemCount() {
             return mItems.size();
         }
+
+        public void setItems(List<Todo> items){
+            mItems = items;
+        }
+
+
     }
 
     public interface Callbacks {
