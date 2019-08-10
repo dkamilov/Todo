@@ -23,6 +23,8 @@
         <item name="colorPrimary">@color/editActivityColorPrimary</item>
         <item name="colorPrimaryDark">@color/editActivityColorPrimaryDark</item>
         <item name="colorAccent">@color/editActivityColorAccent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="titleTextColor">@color/editActivityActionBarTextColor</item>
         <item name="actionMenuTextColor">@color/editActivityActionBarTextColor</item>
         <item name="android:windowBackground">@color/windowBackground</item>

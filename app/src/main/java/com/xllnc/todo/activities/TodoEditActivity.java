@@ -43,8 +43,8 @@ public class TodoEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         TodoEditFragment fragment = (TodoEditFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         fragment.backPressed();
+        super.onBackPressed();
     }
 }

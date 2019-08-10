@@ -4,6 +4,8 @@
     <string name="edit_text_hint">Добавить запись</string>
     <string name="cancel">Отмена</string>
     <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
     <string name="edit_fragment_no_content">Содержимое отсутствует. Запись удалена!</string>
     <string name="edit_fragment_saved">Запись сохранена!</string>
+    <string name="no_items">Нет записей. Нажмите "+", чтобы добавить новую запись!</string>
 </resources>

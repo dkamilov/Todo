@@ -1,12 +1,15 @@
 package com.xllnc.todo.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,12 +27,18 @@ import java.util.UUID;
 
 public class TodoEditFragment extends Fragment {
 
+    private static final String TAG = "TodoEditFragment";
     private static final String ARGS_TODO_ID = "todo_id";
     private static final String ARGS_TODO_IS_NEW_CREATED = "todo_is_new_created";
 
     private EditText editText;
 
     private Todo mTodo;
+    /*
+        0 - when destroyed activity, pressed back button, pressed save menu option
+        1 - when pressed cancel menu option
+     */
+    private int pressedToExit = 0;
 
 
     public static TodoEditFragment newInstance(UUID id, boolean isNewCreated){
@@ -73,6 +82,7 @@ public class TodoEditFragment extends Fragment {
                 checkSave();
                 return true;
             case R.id.cancel:
+                pressedToExit = 1;
                 checkCancel();
                 return true;
             default:
@@ -108,4 +118,18 @@ public class TodoEditFragment extends Fragment {
         checkSave();
     }
 
+    @Override
+    public void onPause() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        if(pressedToExit == 0){
+            checkSave();
+        }
+        super.onStop();
+    }
 }

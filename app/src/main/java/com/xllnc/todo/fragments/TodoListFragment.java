@@ -2,6 +2,7 @@ package com.xllnc.todo.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.xllnc.todo.R;
 import com.xllnc.todo.Todo;
@@ -23,8 +24,12 @@ import java.util.List;
 
 public class TodoListFragment extends Fragment{
 
+    private static final String TAG = "TodoListFragment";
+
     private FloatingActionButton fab;
     private RecyclerView mRecyclerView;
+    private TextView noItemsTextView;
+    private View view;
 
     private TodoAdapter mAdapter;
     private Callbacks mCallbacks;
@@ -49,11 +54,12 @@ public class TodoListFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_todo, container, false);
+        view = inflater.inflate(R.layout.fragment_list_todo, container, false);
+        noItemsTextView = view.findViewById(R.id.no_items_text_view);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
-        updateUI();
         fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,16 +69,29 @@ public class TodoListFragment extends Fragment{
                 mCallbacks.onItemSelected(todo, true);
             }
         });
+        Log.i(TAG, "onCreateView");
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume");
         updateUI();
+        checkNoItems();
+    }
+
+    private void checkNoItems(){
+        Log.i(TAG, "checkNoItems");
+        if(items.size() == 0){
+            noItemsTextView.setVisibility(View.VISIBLE);
+            return;
+        }
+        noItemsTextView.setVisibility(View.GONE);
     }
 
     private void updateUI(){
+        Log.i(TAG, "updateUi");
         items = TodoLab.get(getActivity()).getItems();
         if(mAdapter == null){
             mAdapter = new TodoAdapter(items);
@@ -86,15 +105,11 @@ public class TodoListFragment extends Fragment{
     /**
      *
      *
-     * RecyclerView ItemTouchHelper
+     *ItemTouchHepler
      *
      *
      */
-    private ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-            0,
-            ItemTouchHelper.LEFT| ItemTouchHelper.RIGHT) {
-
-        @Override
+    private ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT){
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
         }
@@ -102,8 +117,11 @@ public class TodoListFragment extends Fragment{
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             TodoLab.get(getActivity()).deleteTodo(items.get(viewHolder.getAdapterPosition()));
-            mAdapter.setItems(TodoLab.get(getActivity()).getItems());
+            items.remove(viewHolder.getAdapterPosition());
+            mAdapter.setItems(items);
             mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            checkNoItems();
+            Log.i(TAG, "onSwiped");
         }
     });
 
@@ -115,13 +133,13 @@ public class TodoListFragment extends Fragment{
      *
      *
      */
-    private class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class TodoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleView;
         private TextView mDateView;
         private Todo mTodo;
 
-        public TodoHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.item_list_view, parent, false));
+        public TodoHolder(View itemView) {
+            super(itemView);
 
             mTitleView = itemView.findViewById(R.id.title_view);
             mDateView = itemView.findViewById(R.id.date_view);
@@ -138,6 +156,7 @@ public class TodoListFragment extends Fragment{
         public void onClick(View view) {
             mCallbacks.onItemSelected(mTodo, false);
         }
+
     }
 
     /**
@@ -157,8 +176,8 @@ public class TodoListFragment extends Fragment{
         @NonNull
         @Override
         public TodoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new TodoHolder(inflater, parent);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_view, parent, false);
+            return new TodoHolder(view);
         }
 
         @Override

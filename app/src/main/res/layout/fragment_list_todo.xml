@@ -6,6 +6,20 @@
     android:orientation="vertical"
     android:padding="@dimen/default_layout_margin">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/no_items_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_items"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:visibility="gone"/>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent">
@@ -26,4 +40,6 @@
             android:layout_margin="16dp"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </FrameLayout>
 </LinearLayout>
